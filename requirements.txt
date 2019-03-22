@@ -2,4 +2,5 @@ geopy
 # Helps tzwhere use less RAM
 numpy
 pytz
+tzlocal
 tzwhere

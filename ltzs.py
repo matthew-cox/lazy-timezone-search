@@ -10,18 +10,15 @@ Lazy TimeZone Search - Output timezone information about a provided city
 from __future__ import absolute_import, division, print_function, unicode_literals
 import argparse
 from datetime import datetime
-import time
 import logging
-try:
-    from pathlib import Path
-except ModuleNotFoundError:
-    from pathlib2 import Path
+from pathlib import Path
 import os
-import pytz
 #
 # Non-standard imports
 #
 from geopy.geocoders import Photon
+import pytz
+from tzlocal import get_localzone
 from tzwhere import tzwhere
 #
 ##############################################################################
@@ -82,6 +79,9 @@ def handle_arguments():
                         default=DEFAULT_LOG_LEVEL,
                         help='Logging verbosity. Default: %(default)s')
 
+    parser.add_argument('-t', '--time-only', action='store_true', required=False,
+                        help='Show time only. Default: %(default)s')
+
     parser.add_argument('city', action='store', nargs='?',
                         help='Find the timezone of this city')
 
@@ -119,9 +119,9 @@ def main():
 
     logger.info("Log level is '%s'", args.log_level.upper())
 
-    local_tz = time.strftime('%Z')
-    print(f"Current timezone: {local_tz}")
-    now_time = datetime.now(tz=pytz.timezone(local_tz))
+    local_tz = get_localzone()
+
+    now_time = datetime.now(tz=pytz.timezone(str(local_tz)))
     utc_time = now_time.astimezone(tz=pytz.utc)
 
     # always show local and UTC time
@@ -130,7 +130,11 @@ def main():
         utc_time.replace(tzinfo=None): utc_time,
     }
 
+    print(f"Current timezone: {now_time.tzname()}")
+
     tz_where = tzwhere.tzwhere()
+
+    format_str = '%H:%M' if args.time_only else '%Y-%m-%d %H:%M'
 
     if args.city:
 
@@ -158,7 +162,7 @@ def main():
     print("")
     # output report
     for the_time in sorted(times.keys(), reverse=True):
-        print(f"{times[the_time].tzname()} - {times[the_time].strftime('%Y-%m-%d %H:%M')}")
+        print(f"{times[the_time].tzname()} - {times[the_time].strftime(format_str)}")
 
 
 #

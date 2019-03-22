@@ -1,4 +1,4 @@
-**Last Updated: 2019-01-26 09:28 @matthew-cox**
+**Last Updated: 2019-03-21 20:21 @matthew-cox**
 
 Table of Contents
 =================
@@ -23,7 +23,8 @@ Nonstandard packages:
 * geopy
 * numpy
 * pytz
-* tzwh
+* tzlocal
+* tzwhere
 
 For fast local dev setup, you will need a  Python + Pyenv + Virtualenv.
 
@@ -89,7 +90,7 @@ Once the requirements are met, one can execute the code locally by running the f
 <details>
     <summary><code>./ltzs.py --help</code></summary>
 
-    usage: ltzs.py [-h] [-l {debug,info,warning,error,critical}] [city]
+    usage: ltzs.py [-h] [-l {debug,info,warning,error,critical}] [-t] [city]
 
     Lazy TimeZone Search - Output timezone information about a provided city
 
@@ -100,10 +101,11 @@ Once the requirements are met, one can execute the code locally by running the f
       -h, --help            show this help message and exit
       -l {debug,info,warning,error,critical}, --log-level {debug,info,warning,error,critical}
                             Logging verbosity. Default: WARNING
+      -t, --time-only       Show time only. Default: False
 
 </details><br />
 
-Here's an example:
+Here's are a couple examples:
 
 <details>
     <summary><code>./ltzs.py Sedona</code></summary>
@@ -114,5 +116,17 @@ Here's an example:
     CET - 2019-01-17 16:49
     UTC - 2019-01-17 15:49
     PST - 2019-01-17 07:49
+
+</details><br />
+
+<details>
+    <summary><code>./ltzs.py -t 'San Angelo'</code></summary>
+
+    Current timezone: EDT
+    San Angelo timezone: CDT
+
+    UTC - 00:12
+    EDT - 20:12
+    CDT - 19:12
 
 </details><br />
